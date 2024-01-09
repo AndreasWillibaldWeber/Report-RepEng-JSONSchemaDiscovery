@@ -10,22 +10,25 @@
 \newcommand\vldbdoi{XX.XX/XXX.XX}
 \newcommand\vldbpages{XXX-XXX}
 % issue-specific
-\newcommand\vldbvolume{14}
-\newcommand\vldbissue{1}
-\newcommand\vldbyear{2020}
+\newcommand\vldbvolume{08}
+\newcommand\vldbissue{01}
+\newcommand\vldbyear{2023}
 % should be fine as it is
 \newcommand\vldbauthors{\authors}
 \newcommand\vldbtitle{\shorttitle} 
-% leave empty if no availability url should be set
-\newcommand\vldbavailabilityurl{URL_TO_YOUR_ARTIFACTS}
-% whether page numbers should be shown or not, use 'plain' for review versions, 'empty' for camera ready
+% leave empty if no availability URL should be set
+\newcommand\vldbavailabilityurl{https://github.com/AndreasWillibaldWeber/RepEng-JSONSchemaDiscovery}
+% whether page numbers should be shown or not, use 'plain' for review versions, 'empty' for camera-ready
 \newcommand\vldbpagestyle{plain} 
+
+%Custom Commands
+\newcommand{\red}[1]{\textcolor{red}{#1}}
 
 \begin{document}
 \title{RepEng Project: JSONSchemaDiscovery}
 
 %%
-%% The "author" command and its associated commands are used to define the authors and their affiliations.
+%% The "author" command and its associated commands define the authors and their affiliations.
 \author{Andreas W. Weber}
 \affiliation{%
   \institution{University of Passau}
@@ -53,54 +56,26 @@ The source code, data, and/or other artifacts have been made available at \url{\
 
 \section{Introduction}
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit \cite{JCohen96, Kosiur01}. Suspendisse a arcu quis arcu malesuada ultricies vitae in felis. Curabitur porta lacus at felis viverra hendrerit in non eros. Nam tempus tincidunt metus vitae fermentum. Donec sed risus felis. Cras luctus massa elementum, semper urna vel, efficitur ipsum. Morbi at tellus libero.
+In science, the significance of reproducibility engineering grows as it becomes increasingly important to enhance the verifiability and adaptability of research findings by fellow scientists in many research areas. This report aims to construct such a reproducible package for the work of Angelo Augusto Frozza et al. \cite{8424731}, which presents an algorithm for extracting JSON schema and measuring the performance of the reference implementation \cite{JSONSchemaDiscovery2013}. Therefore, it describes the problems during the replication procedure, evaluates the findings against the original ones, and explains why only a reproduction package is intended. Furthermore, our experiment expects results similar to or better than the original findings.
 
-Praesent imperdiet, lacus nec varius placerat, est ex eleifend justo, a vulputate leo massa consectetur nunc. Donec posuere in mi ut tempus. Pellentesque sem odio, faucibus non mi in, laoreet maximus arcu. In hac habitasse platea dictumst. Nunc euismod neque eu urna accumsan, vitae vehicula metus tincidunt. Maecenas congue tortor nec varius pellentesque. Pellentesque bibendum libero ac dignissim euismod. Aliquam justo ante, pretium vel mollis sed, consectetur accumsan nibh. Nulla sit amet sollicitudin est. 
+\section{About the Original Work}
 
-\section{Core Structural Elements}
+The \textit{JSONSchemaDiscovery} project focuses on deriving schemas from JSON or Extended JSON documents. The reference implementation of Sam Anzaroot et al. \cite{JSONSchemaDiscovery2013} loads these documents from the NoSQL database \textit{MongoDB}, derives the schemas and stores the results in the database. It also provides a web interface developed within the \textit{Angular} Framework. The backend is developed in \textit{Node.js}. It provides an API for the front end and collects and processes the data from the database through several worker threads. The algorithm intends to derive efficient JSON schemas of large unorganized JSON documents by consolidating information to construct separate schemas for each unique structure and joining them to a comprehensive global schema \cite{8424731}. Experiments on data sets such as \textit{DBPedia} and \textit{Foursquare} revealed that the \textit{JSONSchemaDiscovery} is equivalent or superior to similar methodologies \cite{8424731}. These experiments assess the document mapping quality and the processing time evaluation for comparison with findings from related work. The datasets for the experiments are not directly available as artefacts, and only one experiment has a good enough methodology description to create a reproduction for it. The \textit{JSONSchemaDiscovery} project was published on GitHub in two repositories: the original under the \textit{Apache2}\footnote{\url{github.com/feekosta/JSONSchemaDiscovery}} license and the fork under the \textit{CRAPL v0 BETA 1}\footnote{\url{github.com/gbd-ufsc/JSONSchemaDiscovery}} license.
 
-Nulla placerat feugiat augue, id blandit urna pretium nec. Nulla velit sem, tempor vel mauris ut, porta commodo quam. Donec lectus erat, sodales eu mauris eu, fringilla vestibulum nisl. Morbi viverra tellus id lorem faucibus cursus. Quisque et orci in est faucibus semper vel a turpis. Vivamus posuere sed ligula et. 
+\section{About the Reproduction}
 
-\subsection{Figures}
+\textit{Docker} containers provide a reliable and persistent environment to build and execute the \textit{JSONSchemaDiscovery} project. An official \textit{MongoDB} image from \textit{DockerHub}\footnote{\url{hub.docker.com/_/mongo}} is used for the database, which is essential because the runtime environment of the project and the database influence the experiment's results. For this reason, we also run the reproduction experiment in a separate custom container. \textit{Docker Compose} builds and runs the \textit{Docker} environment with a single command. The experiment container holds scripts to load the data to \textit{MongoDB}, execute the experiment, and collect the data. The main problem is bringing the \textit{JSONSchemaDiscovery} project to a stable version to let it run in a \textit{Docker} environment. It depends on many outdated packages that must be replaced step by step. Another problem is the availability of all artefacts. After contacting the authors, only the \textit{foursquare} data set \cite{ccelikten2016modeling} was made available \footnote{\url{www.dropbox.com/sh/j0bxw52b6fj46pm/AACOu60zgbNG1nKhnseYZ8uHa?dl=0}}. Another main problem was the imprecise description of performed experiments, which allowed only one experiment to be reproduced. Another challenge is automatically collecting the experiment data through the project's API. Often, the request times out before the experiment is finished or the experiment is not complete. The program calling the API must be able to handle this behaviour.
 
-Aliquam justo ante, pretium vel mollis sed, consectetur accumsan nibh. Nulla sit amet sollicitudin est. Etiam ullamcorper diam a sapien lacinia faucibus. Duis vulputate, nisl nec tincidunt volutpat, erat orci eleifend diam, eget semper risus est eget nisl. Donec non odio id neque pharetra ultrices sit amet id purus. Nulla non dictum tellus, id ullamcorper libero. Curabitur vitae nulla dapibus, ornare dolor in, efficitur enim. Cras fermentum facilisis elit vitae egestas. Nam vulputate est non tellus efficitur pharetra. Vestibulum ligula est, varius in suscipit vel, porttitor id massa. Nulla placerat feugiat augue, id blandit urna pretium nec. Nulla velit sem, tempor vel mauris ut, porta commodo quam \autoref{fig:duck}.
+\input{table}
 
-\begin{figure}
-  \centering
-  \includegraphics[width=\linewidth]{figures/duck}
-  \caption{An illustration of a Mallard Duck. Picture from Mabel Osgood Wright, \textit{Birdcraft}, published 1897.}
-  \label{fig:duck}
-\end{figure}
+\section{Conclusion}
 
-\subsection{Tables}
-
-Curabitur vitae nulla dapibus, ornare dolor in, efficitur enim \cite{Editor00}. Cras fermentum facilisis elit vitae egestas. Mauris porta, neque non rutrum efficitur, odio odio faucibus tortor, vitae imperdiet metus quam vitae eros. Proin porta dictum accumsan.
-
-Duis cursus maximus facilisis. Integer euismod, purus et condimentum suscipit, augue turpis euismod libero, ac porttitor tellus neque eu enim. Nam vulputate est non tellus efficitur pharetra. Aenean molestie tristique venenatis. Nam congue pulvinar vehicula. Duis lacinia mollis purus, ac aliquet arcu dignissim ac \autoref{tab:freq}. 
-
-\begin{table}[hb]% h asks to places the floating element [h]ere.
-  \caption{Frequency of Special Characters}
-  \label{tab:freq}
-  \begin{tabular}{ccl}
-    \toprule
-    Non-English or Math & Frequency & Comments\\
-    \midrule
-    \O & 1 in 1000& For Swedish names\\
-    $\pi$ & 1 in 5 & Common in math\\
-    \$ & 4 in 5 & Used in business\\
-    $\Psi^2_1$ & 1 in 40\,000 & Unexplained usage\\
-  \bottomrule
-\end{tabular}
-\end{table}
-
-Nulla sit amet enim tortor \cite{Editor00a}. Ut non felis lectus. Aenean quis
-felis faucibus, efficitur magna vitae. Curabitur ut mauris vel augue tempor suscipit eget eget lacus. Sed pulvinar lobortis dictum.
-Aliquam dapibus a velit.
+Currently, the \textit{JSONSchemaDiscovery} project still needs to be entirely dockerized, which is the main problem of this work, and further evaluation is required to gather reliable results. Table 1 shows the original findings, which are attempted to be confirmed by a reproduction using the same artefacts and methods.
 
 %\clearpage
 
 \bibliographystyle{ACM-Reference-Format}
-\bibliography{sample}
+\bibliography{references}
 
 \end{document}
 \endinput
