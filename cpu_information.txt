@@ -1,0 +1,14 @@
+Architecture: x86_64
+CPU(s): 16
+Vendor ID: GenuineIntel
+Model name: 12th Gen Intel(R) Core(TM) i7-1260P
+CPU family: 6
+Model: 154
+Thread(s) per core: 2
+Core(s) per socket: 12
+Socket(s): 1
+CPU max MHz: 4700.0000
+L1d cache: 448 KiB (12 instances)
+L1i cache: 640 KiB (12 instances)
+L2 cache: 9 MiB (6 instances)
+L3 cache: 18 MiB (1 instance)

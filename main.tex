@@ -5,9 +5,11 @@
 
 \documentclass[sigconf, nonacm]{acmart}
 
+\usepackage{listings}
+
 %% The following content must be adapted for the final version
 % paper-specific
-\newcommand\vldbdoi{XX.XX/XXX.XX}
+\newcommand\vldbdoi{10.5281/zenodo.10713699}
 \newcommand\vldbpages{XXX-XXX}
 % issue-specific
 \newcommand\vldbvolume{08}
@@ -49,28 +51,58 @@
 \ifdefempty{\vldbavailabilityurl}{}{
 \vspace{.3cm}
 \begingroup\small\noindent\raggedright\textbf{PVLDB Artifact Availability:}\\
-The source code, data, and/or other artifacts have been made available at \url{\vldbavailabilityurl}.
+The source code, data, and/or other artifacts have been made available at \url{\vldbavailabilityurl} and \url{\vldbdoi}.
 \endgroup
 }
 %%% VLDB block end %%%
 
 \section{Introduction}
 
-In science, the significance of reproducibility engineering grows as it becomes increasingly important to enhance the verifiability and adaptability of research findings by fellow scientists in many research areas. This report aims to construct such a reproducible package for the work of Angelo Augusto Frozza et al. \cite{8424731}, which presents an algorithm for extracting JSON schema and measuring the performance of the reference implementation \cite{JSONSchemaDiscovery2013}. Therefore, it describes the problems during the replication procedure, evaluates the findings against the original ones, and explains why only a reproduction package is intended. Furthermore, our experiment expects results similar to or better than the original findings.
+In science, the significance of reproducibility engineering grows as it becomes increasingly important to enhance the verifiability and adaptability of research findings by fellow scientists in many research areas. This report aims to construct such a reproducible package for the work of Angelo Augusto Frozza et al. \cite{8424731}, which presents an algorithm for extracting JSON schema and measuring the performance of the reference implementation \cite{JSONSchemaDiscovery2013}. Therefore, it describes the problems during the replication procedure, evaluates the findings against the original ones, and explains why only a replication package is intended. Furthermore, our experiment expects results similar to or better than the original findings.
 
 \section{About the Original Work}
 
 The \textit{JSONSchemaDiscovery} project focuses on deriving schemas from JSON or Extended JSON documents. The reference implementation of Sam Anzaroot et al. \cite{JSONSchemaDiscovery2013} loads these documents from the NoSQL database \textit{MongoDB}, derives the schemas and stores the results in the database. It also provides a web interface developed within the \textit{Angular} Framework. The backend is developed in \textit{Node.js}. It provides an API for the front end and collects and processes the data from the database through several worker threads. The algorithm intends to derive efficient JSON schemas of large unorganized JSON documents by consolidating information to construct separate schemas for each unique structure and joining them to a comprehensive global schema \cite{8424731}. Experiments on data sets such as \textit{DBPedia} and \textit{Foursquare} revealed that the \textit{JSONSchemaDiscovery} is equivalent or superior to similar methodologies \cite{8424731}. These experiments assess the document mapping quality and the processing time evaluation for comparison with findings from related work. The datasets for the experiments are not directly available as artefacts, and only one experiment has a good enough methodology description to create a reproduction for it. The \textit{JSONSchemaDiscovery} project was published on GitHub in two repositories: the original under the \textit{Apache2}\footnote{\url{github.com/feekosta/JSONSchemaDiscovery}} license and the fork under the \textit{CRAPL v0 BETA 1}\footnote{\url{github.com/gbd-ufsc/JSONSchemaDiscovery}} license.
 
-\section{About the Reproduction}
+The work of Frozza et al. \cite{8424731} contains three experiments to evaluate \textit{JSONSchemaDiscovery}, but not all of them can be reconstructed. The quality of JSON document mapping does not provide enough information about how the document comparison is measured and how the 100\% accuracy is reached. Also the quality of \textit{JSONSchemaDiscovery} in comparison to others work lacks accessibility and information about their used source code. For the processing time evaluation, the access for the data set is still missing, but the experiment description is clearly stated. After contacting the Authors, access to the data set was also granted. Therefore, it has the best applicability chances. The reference implementation of Sam Anzaroot et al. \cite{JSONSchemaDiscovery2013} applies the algorithm to a data set stored in a \textit{MongoDB}. The result can be seen in Table \ref{tab:foursquare}. It counts the number of JSON documents used and the obtained raw schemas and raw schemas with ordered structure. It also measures how much time in minutes it takes to obtain the raw schemas as well as the overall time for the process. The last column of the table describes the ratio between the raw schema obtained and the overall time. This is done with the three subsets \textit{venues}, \textit{checkins}, and \textit{tweets} contained in the provided \textit{foursquare} data set of Çelikten et al. \cite{ccelikten2016modeling}.
 
-\textit{Docker} containers provide a reliable and persistent environment to build and execute the \textit{JSONSchemaDiscovery} project. An official \textit{MongoDB} image from \textit{DockerHub}\footnote{\url{hub.docker.com/_/mongo}} is used for the database, which is essential because the runtime environment of the project and the database influence the experiment's results. For this reason, we also run the reproduction experiment in a separate custom container. \textit{Docker Compose} builds and runs the \textit{Docker} environment with a single command. The experiment container holds scripts to load the data to \textit{MongoDB}, execute the experiment, and collect the data. The main problem is bringing the \textit{JSONSchemaDiscovery} project to a stable version to let it run in a \textit{Docker} environment. It depends on many outdated packages that must be replaced step by step. Another problem is the availability of all artefacts. After contacting the authors, only the \textit{foursquare} data set \cite{ccelikten2016modeling} was made available \footnote{\url{www.dropbox.com/sh/j0bxw52b6fj46pm/AACOu60zgbNG1nKhnseYZ8uHa?dl=0}}. Another main problem was the imprecise description of performed experiments, which allowed only one experiment to be reproduced. Another challenge is automatically collecting the experiment data through the project's API. Often, the request times out before the experiment is finished or the experiment is not complete. The program calling the API must be able to handle this behaviour.
+\input{table_original_data}
 
-\input{table}
+The results shown in Table \ref{tab:foursquare} are produced through the manual usage of the \textit{JSONSchemaDiscovery} tool \cite{8424731}. It provided a web-based frontend where all necessary data can be filled in to start the experiment. After the experiment, the results are graphically prepared and visible to the user. The database stores the JSON data on which the experiment is performed and the results and user data. A good amount of IT and Portuguese is necessary to reproduce these steps because the software asks for technical details to connect to the database, and the used language is Portuguese. The experiment was executed on an instance of a \textit{Amazon ECt2.micro} machine \cite{8424731}. To execute the \textit{JSONSchemaDiscovery} project, it needs to be cloned from \textit{GitHub} and a manual install of all packages and software. This process is not easy to succeed because many packages are already marked as deprecated in the package manager of \textit{Node.js}, which is hard to fix without replacing some packages. For our replication, we used the original \textit{JSONSchemaDiscovery} repository\footnotemark[1] on \textit{GitHub}, which the repository\footnotemark[2] of the paper is forked off. It is still maintained and, therefore, more promising.
+
+\clearpage
+
+\section{About the Replication}
+
+\textit{Docker} containers provide a reliable and persistent environment to build and execute the \textit{JSONSchemaDiscovery} project. An official \textit{MongoDB} image from \textit{DockerHub}\footnote{\url{hub.docker.com/_/mongo}} is used for the database, which is essential because the runtime environment of the project and the database influence the experiment's results. For this reason, we also run the replication experiment in a separate custom container. \textit{Docker Compose} builds and runs the \textit{Docker} environment with a single command. The experiment container holds scripts to load the data to \textit{MongoDB}, execute the experiment, and collect the data. The main problem is bringing the \textit{JSONSchemaDiscovery} project to a stable version to let it run in a \textit{Docker} environment. It depends on many outdated packages that must be replaced step by step. Another problem is the availability of all artefacts. After contacting the authors, only the \textit{foursquare} data set \cite{ccelikten2016modeling} was made available \footnote{\url{www.dropbox.com/sh/j0bxw52b6fj46pm/AACOu60zgbNG1nKhnseYZ8uHa?dl=0}}. Another main problem was the imprecise description of performed experiments, which allowed only one experiment to be reproduced. Another challenge is automatically collecting the experiment data through the project's API. Often, the request times out before the experiment is finished or the experiment is not complete. The program calling the API must be able to handle this behaviour.
+
+\lstinputlisting[basicstyle=\footnotesize, caption=CPU configuration of the system environment in which the experiment is executed., label=lst:cpu]{cpu_information.txt}
+
+A smoke test can be implemented to ensure all needed software is installed and working.
+System information like CPU and memory configuration will be automatically obtained via \textit{lscpu} and \textit{/proc/meminfo} and included in the report to make the replication results more comparable. In Listing \ref{lst:cpu} and \ref{lst:mem}, we can see the CPU and memory configuration of the environment in which the experiment was executed. The \textit{Docker} container stores more information but cleans unimportant ones to keep the report clean. This can be controlled and adjusted through configuration. 
+
+\lstinputlisting[basicstyle=\footnotesize, caption=Memory configuration of the system environment in which the experiment is executed., label=lst:mem]{mem_information.txt}
+
+\begin{table}[ht]
+  \caption{Results obtained from \textit{Foursquare} datasets during the replication: Number of JSON documents (N-JSON) in millions, raw schemas (RS), raw schemas with ordered structure (ROrd), time to obtain raw schemas (TB), and the total time (TT) in minutes.}
+  \label{tab:foursquare_results}
+  \input{table_result_data}
+\end{table}
+
+\noindent To load the data into the database, the \textit{mongorestore}\footnote{\url{https://www.mongodb.com/docs/database-tools/mongorestore/}} tool from \textit{MongoDB} is used. It is compatible with the data set and provides a simple interface to load the data fast.
+
+\noindent The main experiment is implemented as a \textit{python3} program. It creates an object that can register and log into the backend API like the frontend. Afterwards, it starts the raw schema extraction with the desired database and collections and stores the result as a \LaTeX~table for the report. It can be controlled via a command line interface, described by a help page. The command line interface provides a lot of freedom for future experiments or different setups. The report can be compiled via \textit{Make} and automatically includes all produced results and information beforehand. The wholes process can be done simultaneously by starting the \textit{doall.sh} script. It also provides command line flags. The most important one is to omit the data loading to the database when executing the script more than once.
+
+The main challenge in this project was to restore the \textit{JSONSchemaDiscovery} project and execute the experiment reliably with the original data set. The project uses many deprecated packages and is barely maintained. The original data set needed to be obtained by contacting the authors. Sometimes, the project crashes during the execution of the experiment without errors and results. Also, building the project inside a \textit{Docker} container often fails.
+
+\section{Results}
+
+Only two of the three collections of the data set procured a result. During the execution of the third one the \textit{JSONSchemaDiscovery} implementation always gets stuck without throwing any error. Therefore, only two collections could be replicated.
+Table \ref{tab:foursquare_results} shows that the timespan for obtaining the raw schema decreased significantly for all results, which confirms the original results shown in Table \ref{tab:foursquare}.
 
 \section{Conclusion}
 
-Currently, the \textit{JSONSchemaDiscovery} project still needs to be entirely dockerized, which is the main problem of this work, and further evaluation is required to gather reliable results. Table 1 shows the original findings, which are attempted to be confirmed by a reproduction using the same artefacts and methods.
+The experiment results can be partially replicated in a better timespan than the original work. Also, the raw schema count of the original paper deviates from our results. To replicate the original time values a machine with a similar computation power needs to be found.
 
 %\clearpage
 
