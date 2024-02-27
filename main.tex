@@ -93,16 +93,16 @@ System information like CPU and memory configuration will be automatically obtai
 
 \noindent The main experiment is implemented as a \textit{python3} program. It creates an object that can register and log into the backend API like the frontend. Afterwards, it starts the raw schema extraction with the desired database and collections and stores the result as a \LaTeX~table for the report. It can be controlled via a command line interface, described by a help page. The command line interface provides a lot of freedom for future experiments or different setups. The report can be compiled via \textit{Make} and automatically includes all produced results and information beforehand. The wholes process can be done simultaneously by starting the \textit{doall.sh} script. It also provides command line flags. The most important one is to omit the data loading to the database when executing the script more than once.
 
-The main challenge in this project was to restore the \textit{JSONSchemaDiscovery} project and execute the experiment reliably with the original data set. The project uses many deprecated packages and is barely maintained. The original data set needed to be obtained by contacting the authors. Sometimes, the project crashes during the execution of the experiment without errors and results. Also, building the project inside a \textit{Docker} container often fails.
+The main challenge in this project is to restore the \textit{JSONSchemaDiscovery} project and execute the experiment reliably with the original data set. The project uses many deprecated packages and is barely maintained. The original data set needed to be obtained by contacting the authors. Sometimes, the project crashes during the execution of the experiment without errors and results. Also, building the project inside a \textit{Docker} container often fails.
 
 \section{Results}
 
-Only two of the three collections of the data set procured a result. During the execution of the third one the \textit{JSONSchemaDiscovery} implementation always gets stuck without throwing any error. Therefore, only two collections could be replicated.
+Only two of the three collections of the data set produced a result. While executing the third one, the \textit{JSONSchemaDiscovery} implementation always gets stuck without throwing any error. Therefore, only two collections could be replicated.
 Table \ref{tab:foursquare_results} shows that the timespan for obtaining the raw schema decreased significantly for all results, which confirms the original results shown in Table \ref{tab:foursquare}.
 
 \section{Conclusion}
 
-The experiment results can be partially replicated in a better timespan than the original work. Also, the raw schema count of the original paper deviates from our results. To replicate the original time values a machine with a similar computation power needs to be found.
+The experiment results can be partially replicated in a better timespan than the original work, even if the raw schema counts of the original paper deviate from our results. A machine with a similar computation power needs to be found to replicate the original time values.
 
 %\clearpage
 
